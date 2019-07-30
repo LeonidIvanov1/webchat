@@ -20,3 +20,4 @@ logging.level:
   ROOT: INFO
   com.epam: INFO
   org.springframework: INFO
+

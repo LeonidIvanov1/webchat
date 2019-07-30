@@ -1,5 +1,6 @@
 package com.epam.webchat.leonidivanov.configuration;
 
+import com.epam.webchat.leonidivanov.WebchatApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

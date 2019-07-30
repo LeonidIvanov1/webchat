@@ -1,18 +1,29 @@
 package com.epam.webchat.leonidivanov.services.impl;
 
 import com.epam.webchat.leonidivanov.datalayer.entity.User;
+import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserStatus;
 import com.epam.webchat.leonidivanov.datalayer.repository.CustomizedUsersJpaRepository;
 import com.epam.webchat.leonidivanov.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImplementation implements UserService {
+
+    private final CustomizedUsersJpaRepository usersJpaRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Autowired
-    private CustomizedUsersJpaRepository usersJpaRepository;
+    public UserServiceImplementation(
+            CustomizedUsersJpaRepository usersJpaRepository,
+            BCryptPasswordEncoder passwordEncoder) {
+
+        this.usersJpaRepository = usersJpaRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     /**
      * Adds user to data source.
@@ -21,7 +32,9 @@ public class UserServiceImplementation implements UserService {
      * @return added user
      */
     @Override
-    public User addUser(User user) {
+    public User register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUserStatus(UserStatus.OFFLINE);
         return usersJpaRepository.saveAndFlush(user);
     }
 
@@ -32,8 +45,8 @@ public class UserServiceImplementation implements UserService {
      * @return user info
      */
     @Override
-    public Optional<User> getUserInfo(long id) {
-        return usersJpaRepository.findById(id);
+    public User getUserData(long id) {
+        return usersJpaRepository.findById(id).get();
     }
 
     /**
@@ -44,8 +57,6 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User changeUser(User user) {
-        //TODO проверить редактирование, если не работает переделат на get
-        // change and save
         return usersJpaRepository.saveAndFlush(user);
     }
 
@@ -97,5 +108,37 @@ public class UserServiceImplementation implements UserService {
     @Override
     public List<User> getAllUsers() {
         return usersJpaRepository.findAll();
+    }
+
+    /**
+     * Change user status from OFFLINE to ONLINE
+     *
+     * @param login    -- user login
+     * @param password -- user password
+     */
+    @Override
+    public void login(String login, String password) {
+
+    }
+
+    /**
+     * Change user status from ONLINE to OFFLINE
+     *
+     * @param userId -- user ID
+     */
+    @Override
+    public void logout(Long userId) {
+
+    }
+
+    /**
+     * Return find user data by user login
+     *
+     * @param login -- user login
+     * @return user data
+     */
+    @Override
+    public User findByLogin(String login) {
+        return usersJpaRepository.findUserByLogin(login);
     }
 }

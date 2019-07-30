@@ -1,4 +1,4 @@
-package com.epam.webchat.leonidivanov.configuration;
+package com.epam.webchat.leonidivanov;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,8 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories("com.epam.webchat.leonidivanov.datalayer.repository")
 public class WebchatApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WebchatApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WebchatApplication.class, args);
+    }
 
 }

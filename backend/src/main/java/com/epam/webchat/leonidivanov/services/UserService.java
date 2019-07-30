@@ -15,7 +15,7 @@ public interface UserService {
      * @param user -- added user
      * @return added user
      */
-    User addUser(User user);
+    User register(User user);
 
     /**
      * Returns info about user
@@ -23,7 +23,7 @@ public interface UserService {
      * @param id -- user ID
      * @return user info
      */
-    Optional<User> getUserInfo(long id);
+    User getUserData(long id);
 
     /**
      * Changes user info
@@ -67,5 +67,28 @@ public interface UserService {
      * @return list of all users
      */
     List<User> getAllUsers();
+
+    /**
+     * Change user status from OFFLINE to ONLINE
+     *
+     * @param login    -- user login
+     * @param password -- user password
+     */
+    void login(String login, String password);
+
+    /**
+     * Change user status from ONLINE to OFFLINE
+     *
+     * @param userId -- user ID
+     */
+    void logout(Long userId);
+
+    /**
+     * Return find user data by user login
+     *
+     * @param login -- user login
+     * @return user data
+     */
+    User findByLogin(String login);
 
 }
