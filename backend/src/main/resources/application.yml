@@ -20,4 +20,5 @@ logging.level:
   ROOT: INFO
   com.epam: INFO
   org.springframework: INFO
+  org.springframework.security: DEBUG
 

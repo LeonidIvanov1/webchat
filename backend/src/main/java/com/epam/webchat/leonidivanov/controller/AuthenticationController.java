@@ -2,6 +2,7 @@ package com.epam.webchat.leonidivanov.controller;
 
 import com.epam.webchat.leonidivanov.datalayer.dto.AuthenticationRequestDto;
 import com.epam.webchat.leonidivanov.datalayer.entity.User;
+import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserRole;
 import com.epam.webchat.leonidivanov.security.jwt.JwtTokenProvider;
 import com.epam.webchat.leonidivanov.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,13 @@ public class AuthenticationController {
     @PostMapping("login")
     public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
+//            User u = new User();
+//            u.setUserRole(UserRole.ADMINISTRATOR);
+//            u.setPassword("admin");
+//            u.setLogin("admin");
+//            u.setFullName("admin");
+//            u.setEmail("admin");
+//            userService.register(u);
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             User user = userService.findByLogin(username);
