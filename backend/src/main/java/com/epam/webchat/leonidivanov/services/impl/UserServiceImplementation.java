@@ -1,6 +1,7 @@
 package com.epam.webchat.leonidivanov.services.impl;
 
 import com.epam.webchat.leonidivanov.datalayer.entity.User;
+import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserRole;
 import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserStatus;
 import com.epam.webchat.leonidivanov.datalayer.repository.CustomizedUsersJpaRepository;
 import com.epam.webchat.leonidivanov.services.UserService;
@@ -28,35 +29,50 @@ public class UserServiceImplementation implements UserService {
     /**
      * Adds user to data source.
      *
-     * @param user -- added user
+     * @param addingUser -- adding user
      * @return added user
      */
     @Override
-    public User register(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUserStatus(UserStatus.OFFLINE);
-        return usersJpaRepository.saveAndFlush(user);
+    public User register(User addingUser) {
+        addingUser.setUserRole(UserRole.USER);
+        addingUser.setUserStatus(UserStatus.OFFLINE);
+        addingUser.setPassword(getEncodedPassword(addingUser.getPassword()));
+        return usersJpaRepository.saveAndFlush(addingUser);
+    }
+
+    /**
+     * Returns encoded password
+     *
+     * @param password -- user password
+     * @return encoded password
+     */
+    private String getEncodedPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
     /**
      * Returns info about user
      *
-     * @param id -- user ID
-     * @return user info
+     * @param userID @return user info
+     * @return user
      */
     @Override
-    public User getUserData(long id) {
-        return usersJpaRepository.findById(id).get();
+    public User getUserData(Long userID) {
+        return usersJpaRepository.findById(userID).get();
     }
 
     /**
      * Changes user info
      *
-     * @param user -- changing data
+     * @param changingUser -- changing data
      * @return changed user data
      */
     @Override
-    public User changeUser(User user) {
+    public User changeUser(User changingUser) {
+        User user = usersJpaRepository.findUserByLogin(changingUser.getLogin());
+        user.setEmail(changingUser.getEmail());
+        user.setFullName(changingUser.getFullName());
+        user.setPassword(getEncodedPassword(changingUser.getPassword()));
         return usersJpaRepository.saveAndFlush(user);
     }
 
@@ -77,7 +93,9 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public void kickUser(long id) {
-        usersJpaRepository.kickUser(id);
+        User user = usersJpaRepository.findById(id).get();
+        user.setUserStatus(UserStatus.KICKED);
+        usersJpaRepository.saveAndFlush(user);
     }
 
     /**
@@ -87,7 +105,9 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public void banUser(long id) {
-        usersJpaRepository.banUser(id);
+        User user = usersJpaRepository.findById(id).get();
+        user.setUserStatus(UserStatus.BANNED);
+        usersJpaRepository.saveAndFlush(user);
     }
 
     /**
@@ -113,22 +133,23 @@ public class UserServiceImplementation implements UserService {
     /**
      * Change user status from OFFLINE to ONLINE
      *
-     * @param login    -- user login
-     * @param password -- user password
+     * @param user -- user login
      */
     @Override
-    public void login(String login, String password) {
-
+    public void login(User user) {
+        user.setUserStatus(UserStatus.ONLINE);
+        usersJpaRepository.saveAndFlush(user);
     }
 
     /**
      * Change user status from ONLINE to OFFLINE
      *
-     * @param userId -- user ID
+     * @param user -- user ID
      */
     @Override
-    public void logout(Long userId) {
-
+    public void logout(User user) {
+        user.setUserStatus(UserStatus.OFFLINE);
+        usersJpaRepository.saveAndFlush(user);
     }
 
     /**
@@ -138,7 +159,7 @@ public class UserServiceImplementation implements UserService {
      * @return user data
      */
     @Override
-    public User findByLogin(String login) {
+    public User findByUserLogin(String login) {
         return usersJpaRepository.findUserByLogin(login);
     }
 }

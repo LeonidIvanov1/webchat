@@ -46,10 +46,6 @@ public class JwtUser implements UserDetails {
         return userId;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -101,6 +97,6 @@ public class JwtUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !UserStatus.BANNED.equals(userStatus);
     }
 }

@@ -12,7 +12,7 @@ public interface MessageService {
     /**
      * Add new message to data source
      *
-     * @param message -- new message
+     * @param message -- message data
      * @return added message
      */
     Message addMessage(Message message);

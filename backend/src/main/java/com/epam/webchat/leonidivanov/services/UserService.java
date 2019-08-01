@@ -3,7 +3,6 @@ package com.epam.webchat.leonidivanov.services;
 import com.epam.webchat.leonidivanov.datalayer.entity.User;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Describes methods to work with User entity.
@@ -20,18 +19,18 @@ public interface UserService {
     /**
      * Returns info about user
      *
-     * @param id -- user ID
-     * @return user info
+     * @param userID -- user ID
+     * @return user data
      */
-    User getUserData(long id);
+    User getUserData(Long userID);
 
     /**
      * Changes user info
      *
-     * @param user -- changing data
+     * @param changingUser -- changing data
      * @return changed user data
      */
-    User changeUser(User user);
+    User changeUser(User changingUser);
 
     /**
      * Deletes user data from data source
@@ -71,17 +70,16 @@ public interface UserService {
     /**
      * Change user status from OFFLINE to ONLINE
      *
-     * @param login    -- user login
-     * @param password -- user password
+     * @param user -- user login
      */
-    void login(String login, String password);
+    void login(User user);
 
     /**
      * Change user status from ONLINE to OFFLINE
      *
-     * @param userId -- user ID
+     * @param user -- user ID
      */
-    void logout(Long userId);
+    void logout(User user);
 
     /**
      * Return find user data by user login
@@ -89,6 +87,6 @@ public interface UserService {
      * @param login -- user login
      * @return user data
      */
-    User findByLogin(String login);
+    User findByUserLogin(String login);
 
 }

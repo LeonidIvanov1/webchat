@@ -15,5 +15,9 @@ public enum UserStatus {
     /**
      * Banned status
      */
-    BANNED
+    BANNED,
+    /**
+     * Kicked status
+     */
+    KICKED
 }

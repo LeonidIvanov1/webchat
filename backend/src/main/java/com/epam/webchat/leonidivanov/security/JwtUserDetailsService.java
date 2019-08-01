@@ -21,7 +21,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        User user = userService.findByLogin(login);
+        User user = userService.findByUserLogin(login);
         if (user == null) {
             throw new UsernameNotFoundException("User with login "
                     + login + "not found");
@@ -30,4 +30,6 @@ public class JwtUserDetailsService implements UserDetailsService {
 
         return jwtUser;
     }
+
+
 }

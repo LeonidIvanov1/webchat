@@ -1,5 +1,6 @@
 package com.epam.webchat.leonidivanov.security.jwt;
 
+import com.epam.webchat.leonidivanov.filter.JwtTokenFilter;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -17,4 +18,5 @@ public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilt
         JwtTokenFilter jwtTokenFilter = new JwtTokenFilter(jwtTokenProvider);
         httpSecurity.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 }

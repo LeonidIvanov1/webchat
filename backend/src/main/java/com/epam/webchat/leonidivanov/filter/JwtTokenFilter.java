@@ -1,5 +1,6 @@
-package com.epam.webchat.leonidivanov.security.jwt;
+package com.epam.webchat.leonidivanov.filter;
 
+import com.epam.webchat.leonidivanov.security.jwt.JwtTokenProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;

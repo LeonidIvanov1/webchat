@@ -1,4 +1,4 @@
-package com.epam.webchat.leonidivanov.datalayer.dto;
+package com.epam.webchat.leonidivanov.controller.dto;
 
 import lombok.Data;
 
