@@ -1,12 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import {Form} from "antd";
+import Login from "./components/Login"
+import {Layout} from 'antd';
+import Chat from "./components/Chat";
+import Users from "./components/Users";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const WrappedNormalLoginForm = Form.create({name: 'normal_login'})(Login);
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+
+const {Header, Footer, Sider, Content} = Layout;
+
+ReactDOM.render(
+    <Layout className="app">
+        <Header className="header">
+            Web Chat v.1.0
+        </Header>
+        <Layout>
+            <Sider className="left-side">
+                <Users/>
+            </Sider>
+            <Content className="central-content">
+                {/*<WrappedNormalLoginForm/>*/}
+                <Chat/>
+            </Content>
+            <Sider className="right-side"></Sider>
+        </Layout>
+
+    </Layout>
+    , document.getElementById('root'));

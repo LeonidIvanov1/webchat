@@ -30,7 +30,7 @@ public class UserRestController {
      *
      * @return users list
      */
-    @GetMapping("/list")
+    @GetMapping
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers().stream()
                 .map(this::convertToDto)
