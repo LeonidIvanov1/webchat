@@ -67,15 +67,27 @@ public class AuthenticationRestController {
             String token = jwtTokenProvider.createToken(user.getLogin());
             userService.login(user);
             log.info("Token for user {} was generated ", user.getLogin());
-            AuthenticationResponseDto response = new AuthenticationResponseDto();
-            response.setUsername(user.getLogin());
-            response.setUserID(user.getUserId());
-            response.setToken(token);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(getAuthenticationResponseDto(user, token));
         } catch (AuthenticationException e) {
             log.error("Error in user: {} authentication", requestDto.getUsername(), e);
-            throw new BadCredentialsException("Invalid username or password", e);
+            throw new BadCredentialsException("Username and password do not match", e);
         }
+    }
+
+    /**
+     * Returns authentication response DTO
+     *
+     * @param user  -- user entity
+     * @param token -- JWT token
+     * @return AuthenticationResponseDto
+     */
+    private AuthenticationResponseDto getAuthenticationResponseDto(User user, String token) {
+        AuthenticationResponseDto response = new AuthenticationResponseDto();
+        response.setUsername(user.getLogin());
+        response.setUserID(user.getUserId());
+        response.setToken(token);
+        response.setUserRole(user.getUserRole());
+        return response;
     }
 
     /**

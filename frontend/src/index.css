@@ -7,6 +7,8 @@
 
 .header {
     background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
 }
 
 .left-side {
@@ -20,7 +22,6 @@
 .central-content {
     background-color: #fff;
     display: flex;
-    align-items: center;
     justify-content: center;
 
 }
