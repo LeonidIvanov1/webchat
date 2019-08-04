@@ -14,7 +14,7 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true, nullable = false)
     private long id;
-    @Column(name = "TEXT", unique = true, nullable = false)
+    @Column(name = "TEXT", nullable = false)
     private String text;
     @Column(name="SENDING_TIME")
     @CreationTimestamp

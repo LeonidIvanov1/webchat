@@ -13,7 +13,9 @@ public class MessageDto {
     @NotNull
     private String text;
     @NotNull
-    private String author;
+    private Long authorId;
+    @Null
+    private String authorFullName;
     @Null
     private Date sendingTime;
 }

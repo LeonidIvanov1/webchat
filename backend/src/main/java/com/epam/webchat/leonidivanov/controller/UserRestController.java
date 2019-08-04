@@ -4,6 +4,8 @@ import com.epam.webchat.leonidivanov.controller.dto.UserDto;
 import com.epam.webchat.leonidivanov.datalayer.entity.User;
 import com.epam.webchat.leonidivanov.services.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,50 +63,28 @@ public class UserRestController {
     }
 
     /**
-     * Changes user data
-     *
-     * @param changedUser -- changing data
-     * @return changed user
-     */
-    @Secured({"ROLE_ADMINISTRATOR", "ROLE_USER"})
-    @PutMapping
-    public UserDto changeUser(@RequestBody UserDto changedUser) {
-        return convertToDto(userService.changeUser(convertToEntity(changedUser)));
-    }
-
-    /**
-     * Deletes user data
-     *
-     * @param userId --deleting user id
-     */
-    @Secured("ROLE_ADMINISTRATOR")
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
-    }
-
-    /**
-     * Kicks user
-     *
-     * @param userId --kicking user id
-     */
-    @Secured("ROLE_ADMINISTRATOR")
-    @DeleteMapping("/kick/{userId}")
-    public void kickUser(@PathVariable Long userId) {
-        userService.kickUser(userId);
-    }
-
-    /**
      * Bans user
      *
      * @param userId --kicking user id
+     * @return
      */
     @Secured("ROLE_ADMINISTRATOR")
-    @DeleteMapping("/ban/{userId}")
-    public void banUser(@PathVariable Long userId) {
-        userService.banUser(userId);
+    @PostMapping("/ban/{userId}")
+    public ResponseEntity<UserDto> banUser(@PathVariable Long userId) {
+        return new ResponseEntity<>(convertToDto(userService.banUser(userId)), HttpStatus.OK);
+
     }
 
+    /**
+     * Unbans user
+     *
+     * @param userId --kicking user id
+     */
+    @Secured("ROLE_ADMINISTRATOR")
+    @PostMapping("/unban/{userId}")
+    public ResponseEntity<UserDto> unbanUser(@PathVariable Long userId) {
+        return new ResponseEntity<>(convertToDto(userService.unbanUser(userId)), HttpStatus.OK);
+    }
 
     /**
      * Converts User entity to User DTO

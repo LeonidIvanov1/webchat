@@ -3,7 +3,6 @@ import React from "react";
 import Fetch from "./Fetch"
 import "antd/dist/antd.css";
 
-const {URL} = "http://localhost:8080/auth/login";
 
 const errorMessage = (messageText) => {
     message.error(messageText);
@@ -23,7 +22,10 @@ class Login extends React.Component {
                         sessionStorage.setItem('token', data.token);
                         sessionStorage.setItem('role', data.userRole);
                         sessionStorage.setItem('id', data.userID);
-                        this.props.handler(data);
+                        this.props.handler({
+                            id: data.userID,
+                            role: data.userRole
+                        });
                     })
                     .catch(error => errorMessage(error.message));
 

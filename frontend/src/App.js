@@ -6,8 +6,10 @@ import Chat from "./components/Chat";
 import Users from "./components/Users";
 import Login from "./components/Login";
 import Fetch from "./components/Fetch";
+import Register from "./components/Register"
 
 const WrappedNormalLoginForm = Form.create({name: 'normal_login'})(Login);
+const WrappedNormalRegisterForm = Form.create({name: 'normal_register'})(Register);
 
 
 const {Header, Footer, Sider, Content} = Layout;
@@ -17,7 +19,10 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {userData: null};
+        this.state = {
+            userData: null,
+            register: false
+        };
     }
 
     handleSubmit = e => {
@@ -29,28 +34,30 @@ class App extends React.Component {
         });
     };
 
-    getAdminRenderData() {
-        console.log(sessionStorage.getItem('userData'));
-        if (sessionStorage.getItem('role') === 'ADMINISTRATOR') {
-            return <Users/>
-        }
-    }
 
     setUserData = (data) => {
         this.setState({userData: data});
     };
 
     getRenderData() {
-        if (sessionStorage.getItem('token') === null) {
-            return <Layout>
-                <Content className="central-content">
-                    <WrappedNormalLoginForm handler={this.setUserData}/>
-                </Content>
-            </Layout>
+        if (sessionStorage.getItem('token') == null) {
+            if (!this.state.register) {
+                return <Layout>
+                    <Content className="central-content">
+                        <WrappedNormalLoginForm handler={this.setUserData}/>
+                    </Content>
+                </Layout>
+            } else {
+                return <Layout>
+                    <Content className="central-content">
+                        <WrappedNormalRegisterForm className={"register-form"} handler={this.setUserData}/>
+                    </Content>
+                </Layout>
+            }
         } else {
             return <Layout>
                 <Content className="central-content">
-                    {this.getAdminRenderData()}
+                    <Users/>
                     <Chat/>
                 </Content>
             </Layout>
@@ -58,22 +65,32 @@ class App extends React.Component {
         }
     }
 
-    getHeaderButtons() {
-        if (sessionStorage.getItem('token') === null) {
+    showRegister = () => {
+        this.setState({register: true});
+    };
+
+    showLogin = () => {
+        this.setState({register: false});
+    };
+
+    getHeaderButtons = () => {
+        if (this.state.userData == null && !this.state.register) {
             return <div>
-                <Button type="primary">Register</Button>
+                <Button type="primary" onClick={this.showRegister}>Register</Button>
             </div>
+        } else if (this.state.register) {
+            return <div><Button type="primary" onClick={this.showLogin}>Login</Button></div>;
         } else {
             return <div>
                 <Button type="primary" onClick={this.logout}>Logout</Button>
             </div>
         }
-    }
+    };
 
     logout = () => {
         Fetch.postData("http://localhost:8080/auth/logout", {}).then(res => {
             sessionStorage.clear();
-            this.setState(null);
+            this.setState({userData: null});
         });
 
     };
@@ -86,8 +103,8 @@ class App extends React.Component {
                     {this.getHeaderButtons()}
                 </Header>
                 {this.getRenderData()}
-                <Footer>
-                    EPAM Spring WEB application
+                <Footer className={"footer"}>
+                    ©EPAM Spring WEB application
                 </Footer>
 
             </Layout>
