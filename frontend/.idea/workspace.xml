@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8123ded2-45ae-413f-972f-b8e5149d1ad4" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/Register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/configuration/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/configuration/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/configuration/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/configuration/WebConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/filter/JwtTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/filter/JwtTokenFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/security/jwt/JwtTokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/com/epam/webchat/leonidivanov/security/jwt/JwtTokenProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Fetch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Fetch.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Message.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Message.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/UserData.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/UserData.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Users.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Users.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -107,7 +95,7 @@
       <workItem from="1564863879885" duration="812000" />
       <workItem from="1564864712849" duration="76000" />
       <workItem from="1564864807073" duration="280000" />
-      <workItem from="1564865361307" duration="29883000" />
+      <workItem from="1564865361307" duration="31285000" />
     </task>
     <servers />
   </component>

@@ -17,6 +17,7 @@ class Chat extends React.Component {
 
     componentDidMount() {
         this.getMessages();
+        this.scrollToBottom();
     }
 
     getMessages = () => {
@@ -44,26 +45,45 @@ class Chat extends React.Component {
             authorId: sessionStorage.getItem("id"),
             text: text
         };
+        let send = document.getElementById("send");
+        send.setAttribute("value", "");
         Fetch.postData("http://localhost:8080/message", data)
             .then(Fetch.status)
             .then(Fetch.json)
             .then(data => {
                 this.getMessages();
-                text="";
+
             })
     };
 
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({behavior: "smooth"});
+    };
+
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
     render() {
         return (
+
             <Layout className="chat">
-                <Layout className="message-area">
-                    {this.getDisplayMessages()}
-                </Layout>
-                <Search
-                    placeholder="Input message text..."
-                    enterButton="Send"
-                    size="large"
-                    onSearch={this.sendMessage}
+                <div className={"flex-chat"}>
+                    <Layout className="message-area">
+                        {this.getDisplayMessages()}
+                        <div style={{float: "left", clear: "both"}}
+                             ref={(el) => {
+                                 this.messagesEnd = el;
+                             }}>
+                        </div>
+                    </Layout>
+                </div>
+                <Search id="send"
+                        placeholder="Input message text..."
+                        enterButton="Send"
+                        size="large"
+                        onSearch={this.sendMessage}
                 />
             </Layout>
         );

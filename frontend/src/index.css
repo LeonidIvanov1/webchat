@@ -49,9 +49,14 @@
 .message-area {
     background-color: #f2f2f2;
     margin-bottom: 10px;
-    overflow-y: scroll;
-    flex-direction: column;
-    flex-wrap: wrap;
+    min-height: min-content;
+    display: flex;
+}
+
+.flex-chat{
+    flex: 1;
+    display: flex;
+    overflow: auto;
 }
 
 .message {
