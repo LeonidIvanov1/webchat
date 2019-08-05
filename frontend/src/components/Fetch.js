@@ -11,17 +11,39 @@ class Fetch {
             body: JSON.stringify(data),
         });
     }
+    static putData(url, data) {
+        return fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: this.getHeaders(),
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            body: JSON.stringify(data),
+        });
+    }
+    static getData(url) {
+        return fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: this.getHeaders(),
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+    }
 
     static getJwtToken() {
         if (sessionStorage.getItem('token') != null) {
-            console.log(sessionStorage.getItem('token'));
             return 'Bearer_' + sessionStorage.getItem('token');
         }
 
     }
     static getHeaders() {
         return new Headers({
-            'Authorization': "blabla",
+            'Authorization': this.getJwtToken(),
             'Content-Type': 'application/json'
         })
     }

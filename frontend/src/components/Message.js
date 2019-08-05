@@ -6,30 +6,22 @@ import {Layout} from 'antd';
 const {Search} = Input;
 
 class Message extends React.Component {
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    };
+    constructor(props) {
+        super(props);
+        this.state = {message: this.props.data}
+    }
 
     render() {
         return (
             <Layout className="message">
                 <Layout className="author">
-                    Иван Иванов
+                    {this.state.message.authorFullName}
                 </Layout>
                 <Layout className="text">
-                    Важно знать количество букв или всех символов в тексте.
-                    Подчас то, что вы пишете, менее важно чем то, как вы пишете
-                    и сколько символов при этом используете. Поэтому многие
-                    интернет-пользователи
-                    беспокоятся о количестве символов.!!!!!!!!!!!!!!!!!!!!!!!!!
+                    {this.state.message.text}
                 </Layout>
                 <Layout className="date">
-                    01.09.19 20:00
+                    {this.state.message.sendingTime}
                 </Layout>
             </Layout>
         );

@@ -5,12 +5,14 @@ import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserRole;
 import com.epam.webchat.leonidivanov.datalayer.entity.enums.UserStatus;
 import com.epam.webchat.leonidivanov.datalayer.repository.CustomizedUsersJpaRepository;
 import com.epam.webchat.leonidivanov.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class UserServiceImplementation implements UserService {
 
@@ -37,6 +39,7 @@ public class UserServiceImplementation implements UserService {
         addingUser.setUserRole(UserRole.USER);
         addingUser.setUserStatus(UserStatus.OFFLINE);
         addingUser.setPassword(getEncodedPassword(addingUser.getPassword()));
+        log.debug("New user was added {}", addingUser);
         return usersJpaRepository.saveAndFlush(addingUser);
     }
 
@@ -58,66 +61,26 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User getUserData(Long userID) {
-        return usersJpaRepository.findById(userID).get();
-    }
-
-    /**
-     * Changes user info
-     *
-     * @param changingUser -- changing data
-     * @return changed user data
-     */
-    @Override
-    public User changeUser(User changingUser) {
-        User user = usersJpaRepository.findUserByLogin(changingUser.getLogin());
-        user.setEmail(changingUser.getEmail());
-        user.setFullName(changingUser.getFullName());
-        user.setPassword(getEncodedPassword(changingUser.getPassword()));
-        return usersJpaRepository.saveAndFlush(user);
-    }
-
-    /**
-     * Deletes user data from data source
-     *
-     * @param id -- deleted user ID
-     */
-    @Override
-    public void deleteUser(long id) {
-        usersJpaRepository.deleteById(id);
-    }
-
-    /**
-     * Kicks user from chat
-     *
-     * @param id -- kicked user ID
-     */
-    @Override
-    public void kickUser(long id) {
-        User user = usersJpaRepository.findById(id).get();
-        user.setUserStatus(UserStatus.KICKED);
-        usersJpaRepository.saveAndFlush(user);
+        log.debug("Getting user info with ID: {}", userID);
+        User user = usersJpaRepository.findById(userID).get();
+        log.debug("User info is {}", user);
+        return user;
     }
 
     /**
      * Bans user from chat
      *
      * @param id -- baned user ID
+     * @return user info
      */
     @Override
-    public void banUser(long id) {
+    public User banUser(long id) {
+        log.debug("Banning user if id {}", id);
         User user = usersJpaRepository.findById(id).get();
         user.setUserStatus(UserStatus.BANNED);
+        log.debug("User {} was banned", user);
         usersJpaRepository.saveAndFlush(user);
-    }
-
-    /**
-     * Returns list of online users
-     *
-     * @return list of online users
-     */
-    @Override
-    public List<User> getOnlineUsers() {
-        return usersJpaRepository.getOnlineUsers();
+        return user;
     }
 
     /**
@@ -127,6 +90,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public List<User> getAllUsers() {
+        log.debug("Getting info about all users");
         return usersJpaRepository.findAll();
     }
 
@@ -137,6 +101,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public void login(User user) {
+        log.debug("Logining user {}", user);
         user.setUserStatus(UserStatus.ONLINE);
         usersJpaRepository.saveAndFlush(user);
     }
@@ -148,6 +113,7 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public void logout(User user) {
+        log.debug("Logout user {}", user);
         user.setUserStatus(UserStatus.OFFLINE);
         usersJpaRepository.saveAndFlush(user);
     }
@@ -160,6 +126,24 @@ public class UserServiceImplementation implements UserService {
      */
     @Override
     public User findByUserLogin(String login) {
-        return usersJpaRepository.findUserByLogin(login);
+        log.debug("Finding user with login {}", login);
+        User userByLogin = usersJpaRepository.findUserByLogin(login);
+        log.debug("Founded user {}", userByLogin);
+        return userByLogin;
+    }
+
+    @Override
+    public User unbanUser(Long userId) {
+        log.debug("Unbanning user with id {}", userId);
+        User user = usersJpaRepository.findById(userId).get();
+        user.setUserStatus(UserStatus.OFFLINE);
+        log.debug("User was unbanned");
+        usersJpaRepository.saveAndFlush(user);
+        return user;
+    }
+
+    @Override
+    public User findById(Long authorId) {
+        return usersJpaRepository.findById(authorId).get();
     }
 }

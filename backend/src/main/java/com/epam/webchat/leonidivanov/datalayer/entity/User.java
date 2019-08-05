@@ -17,11 +17,11 @@ public class User {
     private Long userId;
     @Column(name = "LOGIN", unique = true, nullable = false)
     private String login;
-    @Column(name = "PASSWORD", unique = true, nullable = false)
+    @Column(name = "PASSWORD", nullable = false)
     private String password;
     @Column(name = "EMAIL", unique = true, nullable = false)
     private String email;
-    @Column(name = "FULL_NAME", unique = true, nullable = false)
+    @Column(name = "FULL_NAME", nullable = false)
     private String fullName;
     @Enumerated(EnumType.STRING)
     private UserRole userRole;

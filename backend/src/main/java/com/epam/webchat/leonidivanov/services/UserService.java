@@ -25,40 +25,12 @@ public interface UserService {
     User getUserData(Long userID);
 
     /**
-     * Changes user info
-     *
-     * @param changingUser -- changing data
-     * @return changed user data
-     */
-    User changeUser(User changingUser);
-
-    /**
-     * Deletes user data from data source
-     *
-     * @param id -- deleted user ID
-     */
-    void deleteUser(long id);
-
-    /**
-     * Kicks user from chat
-     *
-     * @param id -- kicked user ID
-     */
-    void kickUser(long id);
-
-    /**
      * Bans user from chat
      *
      * @param id -- baned user ID
+     * @return
      */
-    void banUser(long id);
-
-    /**
-     * Returns list of online users
-     *
-     * @return list of online users
-     */
-    List<User> getOnlineUsers();
+    User banUser(long id);
 
     /**
      * Returns list of all users
@@ -89,4 +61,7 @@ public interface UserService {
      */
     User findByUserLogin(String login);
 
+    User unbanUser(Long userId);
+
+    User findById(Long authorId);
 }
