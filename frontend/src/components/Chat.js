@@ -11,7 +11,8 @@ class Chat extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            messages: null
+            messages: [],
+            lastIndex: 0
         }
     }
 
@@ -21,12 +22,21 @@ class Chat extends React.Component {
     }
 
     getMessages = () => {
-        Fetch.getData("http://localhost:8080/message")
+
+        let url = "http://localhost:8080/message?messageIndex=" + this.state.lastIndex;
+        Fetch.getData(url)
             .then(Fetch.status)
             .then(Fetch.json)
             .then(data => {
-                this.setState({messages: data});
-            })
+                Array.prototype.push.apply(this.state.messages, data);
+
+                this.setState({
+                    lastIndex: (parseInt(this.state.lastIndex) + parseInt(data.length))
+                });
+            }).then(() => {
+            if (sessionStorage.getItem('token') !== null)
+                this.getMessages();
+        })
     };
 
     getDisplayMessages = () => {
@@ -34,7 +44,7 @@ class Chat extends React.Component {
         if (messages != null) {
             let displMessages = [];
             for (let i = 0; i < messages.length; i++) {
-                displMessages.push(<Message data={messages[i]}/>);
+                displMessages.push(<Message key={messages[i].id} data={messages[i]}/>);
             }
             return displMessages;
         }
@@ -48,12 +58,7 @@ class Chat extends React.Component {
         let send = document.getElementById("send");
         send.setAttribute("value", "");
         Fetch.postData("http://localhost:8080/message", data)
-            .then(Fetch.status)
-            .then(Fetch.json)
-            .then(data => {
-                this.getMessages();
-
-            })
+            .then(Fetch.status);
     };
 
     scrollToBottom = () => {

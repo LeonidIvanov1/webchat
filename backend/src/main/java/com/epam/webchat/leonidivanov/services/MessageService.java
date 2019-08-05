@@ -21,6 +21,7 @@ public interface MessageService {
      * Returns all messages
      *
      * @return list of messages
+     * @param messageIndex
      */
-    List<Message> getAllMessages();
+    List<Message> getMessages(int messageIndex);
 }

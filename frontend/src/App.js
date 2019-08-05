@@ -39,8 +39,12 @@ class App extends React.Component {
         this.setState({userData: data});
     };
 
+    setRegisterData = (data) => {
+        this.setState(data);
+    };
+
     getRenderData() {
-        if (sessionStorage.getItem('token') == null) {
+        if (sessionStorage.getItem('token') == null || this.state.userData == null) {
             if (!this.state.register) {
                 return <Layout>
                     <Content className="central-content">
@@ -50,7 +54,8 @@ class App extends React.Component {
             } else {
                 return <Layout>
                     <Content className="central-content">
-                        <WrappedNormalRegisterForm className={"register-form"} handler={this.setUserData}/>
+                        <WrappedNormalRegisterForm className={"register-form"}
+                                                   handler={this.setRegisterData}/>
                     </Content>
                 </Layout>
             }
@@ -76,10 +81,12 @@ class App extends React.Component {
     getHeaderButtons = () => {
         if (this.state.userData == null && !this.state.register) {
             return <div>
-                <Button type="primary" onClick={this.showRegister}>Register</Button>
+                <Button type="primary"
+                        onClick={this.showRegister}>Register</Button>
             </div>
         } else if (this.state.register) {
-            return <div><Button type="primary" onClick={this.showLogin}>Login</Button></div>;
+            return <div><Button type="primary"
+                                onClick={this.showLogin}>Login</Button></div>;
         } else {
             return <div>
                 <Button type="primary" onClick={this.logout}>Logout</Button>

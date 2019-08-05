@@ -34,10 +34,12 @@ public class MessageServiceImplementation implements MessageService {
     /**
      * Returns all messages
      *
+     * @param messageIndex
      * @return list of messages
      */
     @Override
-    public List<Message> getAllMessages() {
-        return messageJpaRepository.findAll();
+    public List<Message> getMessages(int messageIndex) {
+        List<Message> messages = messageJpaRepository.findAll();
+        return messages.subList(messageIndex, messages.size());
     }
 }

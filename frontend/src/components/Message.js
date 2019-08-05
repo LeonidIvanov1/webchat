@@ -10,7 +10,18 @@ class Message extends React.Component {
         super(props);
         this.state = {message: this.props.data}
     }
+     convert(timestamp){
+         let months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+         let date = new Date(timestamp);
+         let year = date.getFullYear();
+         let month = months_arr[date.getMonth()];
+         let day = date.getDate();
+         let hours = date.getHours();
+         let minutes = "0" + date.getMinutes();
+         let seconds = "0" + date.getSeconds();
+         return  month+'-'+day+'-'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
+    }
     render() {
         return (
             <Layout className="message">
@@ -21,7 +32,7 @@ class Message extends React.Component {
                     {this.state.message.text}
                 </Layout>
                 <Layout className="date">
-                    {this.state.message.sendingTime}
+                    {this.convert(this.state.message.sendingTime)}
                 </Layout>
             </Layout>
         );

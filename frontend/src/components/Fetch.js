@@ -4,7 +4,7 @@ class Fetch {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: this.getHeaders(),
             redirect: 'follow',
             referrer: 'no-referrer',
@@ -16,7 +16,7 @@ class Fetch {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: this.getHeaders(),
             redirect: 'follow',
             referrer: 'no-referrer',
@@ -28,7 +28,7 @@ class Fetch {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            credentials: 'same-origin',
+            credentials: 'include',
             headers: this.getHeaders(),
             redirect: 'follow',
             referrer: 'no-referrer',
@@ -54,7 +54,7 @@ class Fetch {
         } else if (response.status === 422) {
             return Promise.reject(new Error("Username and password do not match"));
         } else {
-            return Promise.reject(new Error(response.body));
+            return Promise.reject(new Error(response));
         }
 
     }

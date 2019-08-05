@@ -58,7 +58,7 @@ class Register extends React.Component {
                     .then(Fetch.json)
                     .then(data => {
                         successMessage("Register complete! Login please!");
-                        this.props.handler({userData: null});
+                        this.props.handler({register: false});
                     })
                     .catch(error => errorMessage(error.message));
 

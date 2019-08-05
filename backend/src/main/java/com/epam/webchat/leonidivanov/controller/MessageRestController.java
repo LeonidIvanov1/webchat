@@ -7,9 +7,17 @@ import com.epam.webchat.leonidivanov.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +27,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/message")
 public class MessageRestController {
+    private final Map<DeferredResult<List<MessageDto>>, Integer> chatRequests =
+            new ConcurrentHashMap<>();
+
     private final MessageService messageService;
     private final ModelMapper modelMapper;
     private final UserService userService;
@@ -37,10 +48,29 @@ public class MessageRestController {
      */
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_USER"})
     @GetMapping
-    public List<MessageDto> getAllMessages() {
+    public DeferredResult<List<MessageDto>> getAllMessages(
+            @RequestParam int messageIndex) {
         log.debug("Trying to get all messages");
-        return messageService.getAllMessages().stream().map(this::convertToDto)
+        final DeferredResult<List<MessageDto>> deferredResult =
+                new DeferredResult<>(
+                        null, Collections.emptyList());
+        this.chatRequests.put(deferredResult, messageIndex);
+
+        deferredResult.onCompletion(new Runnable() {
+            @Override
+            public void run() {
+                chatRequests.remove(deferredResult);
+            }
+        });
+
+        List<MessageDto> messages = messageService
+                .getMessages(messageIndex)
+                .stream().map(this::convertToDto)
                 .collect(Collectors.toList());
+        if (!messages.isEmpty()) {
+            deferredResult.setResult(messages);
+        }
+        return deferredResult;
     }
 
     /**
@@ -51,9 +81,20 @@ public class MessageRestController {
      */
     @Secured({"ROLE_ADMINISTRATOR", "ROLE_USER"})
     @PostMapping
-    public MessageDto addMessage(@RequestBody MessageDto addingMessage) {
-        log.debug("Trying to add new message by author {}", addingMessage.getId());
-        return convertToDto(messageService.addMessage(convertToEntity(addingMessage)));
+    public void addMessage(@RequestBody @Valid MessageDto addingMessage, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            log.warn("MessageDTO is not valid {}", addingMessage);
+            throw new ValidationException("Message data is not valid");
+        }
+        log.info("Trying to add new message by author {}", addingMessage.getId());
+        MessageDto messageDto = convertToDto(messageService.addMessage(convertToEntity(addingMessage)));
+        for (Map.Entry<DeferredResult<List<MessageDto>>, Integer> entry : this.chatRequests.entrySet()) {
+            List<MessageDto> messages = messageService
+                    .getMessages(entry.getValue())
+                    .stream().map(this::convertToDto)
+                    .collect(Collectors.toList());
+            entry.getKey().setResult(messages);
+        }
     }
 
     /**
@@ -63,9 +104,9 @@ public class MessageRestController {
      * @return user DTO
      */
     private MessageDto convertToDto(Message message) {
-            MessageDto messageDto = modelMapper.map(message, MessageDto.class);
-            messageDto.setAuthorFullName(message.getAuthor().getFullName());
-            return messageDto;
+        MessageDto messageDto = modelMapper.map(message, MessageDto.class);
+        messageDto.setAuthorFullName(message.getAuthor().getFullName());
+        return messageDto;
     }
 
     /**

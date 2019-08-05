@@ -17,11 +17,12 @@ import java.util.*;
 
 @Component
 public class JwtTokenProvider {
-    /*
-    TODO закинуть значения в файл пропертей
-     */
-    private String secret = "webchat";
-    private Long validitiMilliseconds = 3600000L;
+    public static final String AUTHORIZATION_HEADER_NAME = "authorization";
+    public static final String BEARER_TOKEN_START = "Bearer_";
+
+    private static String secret = "webchat";
+    private static final Long VALIDITY_MILLISECONDS = 3600000L;
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -32,13 +33,12 @@ public class JwtTokenProvider {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
+        String bearerToken = req.getHeader(AUTHORIZATION_HEADER_NAME);
+        if (bearerToken != null && bearerToken.startsWith(BEARER_TOKEN_START)) {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;
@@ -49,7 +49,7 @@ public class JwtTokenProvider {
         claims.put("roles", getRoleNames());
 
         Date now = new Date();
-        Date validity = new Date(now.getTime() + validitiMilliseconds);
+        Date validity = new Date(now.getTime() + VALIDITY_MILLISECONDS);
 
         return Jwts.builder()//
                 .setClaims(claims)//
